@@ -1,0 +1,8 @@
+lib/xPL/Dock/ZiBase.pm
+lib/xPL/ZiBase/ZiMessage.pm
+MANIFEST
+bin/xpl-zibase
+Changes
+Makefile.PL
+README
+META.yml                                 Module meta-data (added by MakeMaker)

@@ -1,0 +1,50 @@
+xpl-zibase
+==========
+
+xpl-zibase is a Zodianet ZiBase gateway for the xPL home automation protocol.
+
+It allows to :
+  - Receive RF messages from the ZiBase (many supported protocols : X10,
+  Chacon, X2D...)
+  - Send RF commands to devices configured in the ZiBase
+
+This work is heavily using and based on the great xpl-perl suite
+by Mark Hindess : http://www.xpl-perl.org.uk/.
+
+Author website : http://www.poulpy.com
+
+PREREQUISITES
+
+To use this application, you have to own a ZiBase home automation controller
+(see http://www.zodianet.com). The ZiBase has to be configured/working, and
+has to be on the same subnet as the server running this xpl-zibase client
+(because of UDP broadcast use).
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make install
+
+You can then read the manpage of xpl-zibase for common usage.
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+  xPL::Base
+
+xPL::Base Module is provided by the xpl-perl package by Mark Hindess
+and can be downloaded from http://www.xpl-perl.org.uk/.
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2011 by Thibault Lamy
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.10.0 or,
+at your option, any later version of Perl 5 you may have available.
+
+

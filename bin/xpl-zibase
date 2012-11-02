@@ -1,0 +1,126 @@
+#!/usr/bin/perl -w
+
+eval 'exec /usr/bin/perl -w -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
+
+use xPL::Dock qw/ZiBase/;
+use IO::Handle;
+STDERR->autoflush(1);
+STDOUT->autoflush(1);
+
+my $xpl = xPL::Dock->new(name => 'zibase');
+$xpl->main_loop;
+
+
+# send a 'hbeat.end' message on exit
+END { defined $xpl && $xpl->send_hbeat_end(); }
+
+=head1 NAME
+
+xpl-zibase - Perl script for an xPL Zodianet's ZiBase gateway
+
+=head1 SYNOPSIS
+
+  xpl-zibase [flags] [options] <device>
+  where valid flags are:
+    --help                        - show this help text
+    --verbose                     - verbose mode (for the xPL layer)
+    --zibase-verbose              - verbose mode (for the ZiBase layer)
+  and valid options are (default shown in brackets):
+    --interface if0               - the interface for xPL messages (first
+                                   non-loopback or loopback)
+
+=head1 DESCRIPTION
+
+This script is an xPL client that interfaces with the Zodianet's ZiBase
+home automation controller.
+
+It heavily uses and is based on the xpl-perl suite by Mark Hindess.
+
+To use this application, you have to own a ZiBase home automation controller
+(see http://www.zodianet.com).
+The ZiBase has to be configured/working, and has to be on the same subnet as
+the server running this xpl-zibase client (because of UDP broadcast use).
+
+=head1 RF RECEIVING
+
+The xpl-zibase client will broadcast xPL Messages as soon as the ZiBase
+receives a RF command from any supported home automation device (Oregon
+Scientific sensors, Homeeasy remote, x10 switch, etc...).
+
+Sensors values will generate sensor.basic messages. Examples :
+  * - thgr228n.OS439171073[temp]=16.2
+  * - thgr228n.OS439171073[humidity]=67
+
+Home automation remotes button press will generate sensor.basic messages
+using the 'input' device type. As defined in the sensor.basic schema, High
+means 'on' and Low means 'off'.
+Examples :
+  * - CS182610306[input]=high
+  * - CS182930487[input]=low
+
+Finally, pure basic X10 RF commands received will generate x10.basic trigger
+xPL messages. Examples :
+  * - e14 on
+  * - e14 off
+
+=head1 RF SENDING
+
+You can use this client to send RF commands via the ZiBase using CMND xPL
+message conforming to the x10.basic schema.
+Indeed, all configured actuators in the ZiBase are given a pseudo X10-like
+identifier (even if they use another protocol sucj as Chacon or X2D) such
+as A4 or P10.
+
+Example :
+To turn on a device that has the F5 x10 pseudo identifier, juste send the
+following xPL message :
+  xpl-sender -m xpl-cmnd -c rfcmd.basic device=f5 command=on protocol=x10
+  xpl-sender -m xpl-cmnd -c x10.basic device=f5 command=on 
+  
+To turn on a device that has the A10 zwave pseudo identifier, juste send the
+following xPL message :
+  xpl-sender -m xpl-cmnd -c rfcmd.basic device=a10 command=on protocol=zwave
+  
+The client also support dimming levels (only for Chacon and X2D devices) :
+  xpl-sender -m xpl-cmnd -c x10.basic device=f5 command=dim level=50 
+  xpl-sender -m xpl-cmnd -c rfcmd.basic device=f5 command=dim protocol=x10 level=50
+  xpl-sender -m xpl-cmnd -c rfcmd.basic device=a10 command=dim protocol=zwave level=50
+  
+To execute the scenario number 15:
+   xpl-sender -m xpl-cmnd -c scencmd.basic scenario=15
+
+=head1 API VERSION
+
+This module has been developed for ZiBases supporting the ZAPI v1.13
+ZiBase firmware should be >= 559
+
+=head1 SEE ALSO
+
+xPL::Client(3), xPL::Listener(3), xPL::Dock::ZiBase(3)
+
+Authors website: http://www.poulpy.com
+				Modified by Hellorheaven
+				
+xpl-perl website: http://www.xpl-perl.org.uk/
+
+Zodianet website: http://www.zodianet.com
+
+=head1 AUTHOR
+
+xpl-zibase:
+Thibault Lamy, E<lt>titi@poulpy.comE<gt>
+Mickael Zerbib(alias hellorheaven), E<lt>mickradio@hotmail.comE<gt>
+
+xPL Perl :
+Mark Hindess, E<lt>soft-xpl-perl@temporalanomaly.comE<gt>
+
+=head1 COPYRIGHT
+
+Copyright (C) 2011 by Thibault Lamy
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.7 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut

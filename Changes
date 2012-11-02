@@ -1,0 +1,64 @@
+Revision history for xpl-zibase.0.21  Wed Nov 2 12:00:00 2012;
+
+- Comments the Zapinit not needed anymore(in ZAPI 1.13) for registering host to the zibase 
+
+- Comments the xpl_send_x10 sub not needed anymore replace by xpl_send_rfcmd which is compatible with all RF protocol support by the zibase
+
+- Adding the possibility to unregister host from the zibase (not used for the moment)
+
+- Adding the rfcmd.basic xpl-trigger see below for example:
+
+To turn on a device that has the F5 x10 pseudo identifier, juste send the
+following xPL message :
+  xpl-sender -m xpl-cmnd -c rfcmd.basic device=f5 command=on protocol=x10
+
+The client also support dimming levels:
+  xpl-sender -m xpl-cmnd -c rfcmd.basic device=f5 command=dim protocol=x10 level=50
+  
+To turn on a device that has the A10 zwave pseudo identifier, juste send the
+following xPL message :
+  xpl-sender -m xpl-cmnd -c rfcmd.basic device=a10 command=on protocol=zwave
+
+The client also support dimming levels:
+  xpl-sender -m xpl-cmnd -c rfcmd.basic device=a10 command=dim protocol=zwave level=50
+ 
+- Adding the scencmd.basic trigger for execute a scenario
+ To execute the scenario number 15:
+   xpl-sender -m xpl-cmnd -c scencmd.basic scenario=15
+   
+- Enabling compatibility with old xpl-trigger x10.basic lost in v0.20
+
+ 
+list of all RF protocol:
+  preset (x10 by default)
+  visonic433
+  visonic868
+  chacon
+  domia
+  x10
+  zwave
+  rfs10
+  xdd433
+  xdd433alrm
+  xdd868
+  xdd868alrm
+  xdd868insh
+  xdd868piwi
+  xdd868boac
+  
+
+
+
+
+Revision history for xpl-zibase.0.20  Thu Nov 1 11:00:00 2012;
+- Adding support of any protocol (as describe in ZAPI 1.13) for xpl-sender;
+- Adding RF received for battery status
+- Adding support of RF received from zwave;
+- Adding support of unassociation command(command=unassoc); 
+- Adding possibility to redirect the STDOUT and STDERR to log file;
+
+Revision history for xpl-zibase.
+
+0.10  Mon Apr 4 00:24:23 2011
+	- initial version;
+
