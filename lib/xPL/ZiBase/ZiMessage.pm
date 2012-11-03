@@ -4,6 +4,7 @@ package ZiMessage;
 
 use Socket;
 
+
 my $zibase_commands = {
   'off' => 0,
   'on'  => 1,
@@ -186,19 +187,20 @@ sub setRFCommand {
   
   # Sets the Protocol code
   my $proto = $zibase_protocol->{lc($protocol)};
-  $prm = $prm | ($proto & 0xFF) <<0x08;
+  $prm = $prm | (($proto & 0xFF) << 0x08);
 
   # Sets the dim level if needed
   if ($prm == $zibase_commands->{'dim'}) {
-    $prm = $prm | ($level & 0xFF) << 0x16;
+    $prm = $prm | (($level & 0xFF) << 0x16);
   }
 
   # Sets the burst if specified
   if (defined($nbrepeat) && $nbrepeat > 1) {
-    $prm = $prm | ($nbrepeat & 0xFF) << 0x24;
+    $prm = $prm | (($nbrepeat & 0xFF) << 0x24);
   }
 
   $self->{_param2} = $prm;
+
 }
 
 =head2 C<setRFexecScenario($scenario)>

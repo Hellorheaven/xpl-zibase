@@ -208,7 +208,7 @@ sub xpl_rfcmd {
   my $m_command = $msg->field('command');
   my $m_protocol = $msg->field('protocol');
   my $m_level = $msg->field('level');
-
+  
   # Send corresponding command to zibase
   $self->zibase_command($m_device, $m_command, $m_protocol, $m_level, $repeatcnt);
 
