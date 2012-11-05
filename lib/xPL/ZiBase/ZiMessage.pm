@@ -51,7 +51,6 @@ sub new
     _param4 => 0,
     _my_count => 0,
     _your_count => 0,
-	_command_text => 0,
   };
 
   bless $self, $class;
