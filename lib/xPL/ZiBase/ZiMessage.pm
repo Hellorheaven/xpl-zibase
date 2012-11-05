@@ -45,7 +45,10 @@ sub new
     _reserved1 => "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
     _zibase_id => "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
     _reserved2 => "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
-    _param1 => 0,
+	_alphacommand =>"",
+	_label_base => "",
+	_command_text => "",
+	_param1 => 0,
     _param2 => 0,
     _param3 => 0,
     _param4 => 0,
@@ -220,11 +223,11 @@ sub setRFexecScenario {
   $self->{_param2} = $scenario;
 }
 
-=head2 C<setRFexecScenario($scenario)>
+=head2 C<setRFexecScript($script)>
 
 Sets the ZiMessage to be a RF command send message with the given
 parameters :
-  scenario should be the number of scenario you would be launch 
+  script to be launch by zibase
 
 =cut
 
@@ -233,7 +236,13 @@ sub setRFexecScript {
 
   # Sets global command type
   $self->{_command} = 16;
+  $self->{_alphacommand} = 'SendCmd';
+  $self->{_label_base} = '';
   $self->{_command_text} = $script;
+  $self->{_param1} = 0;
+  $self->{_param2} = 0;
+  $self->{_param3} = 0;
+  $self->{_param4} = 0;
 }
 
 
