@@ -521,7 +521,7 @@ sub xpl_send_script {
                        schema => 'script.basic',
                        body =>
                        [
-                        script => lc($script),
+                        script => $script,
                         command => "execute",
                        ]);
   print $xplmsg->summary,"\n" if $self->{_verbose};

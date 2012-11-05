@@ -76,6 +76,7 @@ sub getBinaryMessage {
   $data .= $self->{_reserved1};
   $data .= $self->{_zibase_id};
   $data .= $self->{_reserved2};
+  $data .= $self->{_command_text};
   $data .= pack('NNNN', $self->{_param1}, $self->{_param2}, $self->{_param3}, $self->{_param4});
   $data .= pack('nn', $self->{_my_count}, $self->{_your_count});
 
@@ -236,8 +237,8 @@ sub setRFexecScript {
 
   # Sets global command type
   $self->{_command} = 16;
-  $self->{_alphacommand} = 'SendCmd';
-  $self->{_label_base} = '';
+  $self->{_alphacommand} = "SendCmd";
+  $self->{_label_base} = "";
   $self->{_command_text} = $script;
   $self->{_param1} = 0;
   $self->{_param2} = 0;
