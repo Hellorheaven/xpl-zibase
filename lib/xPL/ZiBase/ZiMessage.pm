@@ -100,7 +100,7 @@ sub fromPayload {
   $self->{_reserved1} = $upa[2];
   $self->{_zibase_id} = $upa[3];
   $self->{_reserved2} = $upa[4];
-  $self->{_command_text} = $upa[5]
+  $self->{_command_text} = $upa[5];
   $self->{_param1} = $upa[6];
   $self->{_param2} = $upa[7];
   $self->{_param3} = $upa[8];
