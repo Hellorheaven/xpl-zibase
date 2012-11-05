@@ -325,7 +325,7 @@ sub zibase_execScript {
   # Send it over network
   $self->zibase_send_message($zmsg);
   # Send corresponding xPL Trigger
-  $self->xpl_send_scenario($script);
+  $self->xpl_send_script($script);
 }
 
 
