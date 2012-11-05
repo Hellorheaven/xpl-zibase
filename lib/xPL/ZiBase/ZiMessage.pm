@@ -51,7 +51,7 @@ sub new
     _param4 => 0,
     _my_count => 0,
     _your_count => 0,
-	_command_text => "a",
+	_command_text => "",
   };
 
   bless $self, $class;
@@ -76,7 +76,7 @@ sub getBinaryMessage {
   $data .= $self->{_reserved2};
   $data .= pack('NNNN', $self->{_param1}, $self->{_param2}, $self->{_param3}, $self->{_param4});
   $data .= pack('nn', $self->{_my_count}, $self->{_your_count});
-  $data .= pack('N*',$self->{_command_text});
+  $data .= pack('a*',$self->{_command_text});
 
 
   return ($data);
