@@ -128,7 +128,6 @@ sub init {
                           class_type => 'basic',
                          }
 						 );
-  # return $self;
   
     # Setup x10 commands hook callback
 	$xpl->add_xpl_callback(id => 'xpl-x10cmd', callback => \&xpl_rfcmd,
@@ -139,8 +138,6 @@ sub init {
                           class => 'x10',
                           class_type => 'basic',
                          });
-
-  # return $self;
   
   # Setup scenario commands hook callback
   $xpl->add_xpl_callback(id => 'xpl-scencmd', callback => \&xpl_scencmd,
@@ -149,6 +146,16 @@ sub init {
                          {
                           message_type => 'xpl-cmnd',
                           class => 'scenario',
+                          class_type => 'basic',
+                         });
+
+  # Setup script commands hook callback
+  $xpl->add_xpl_callback(id => 'xpl-scriptcmd', callback => \&xpl_scriptcmd,
+                         arguments => $self,
+                         filter =>
+                         {
+                          message_type => 'xpl-cmnd',
+                          class => 'script',
                           class_type => 'basic',
                          });
 
@@ -240,6 +247,28 @@ sub xpl_scencmd {
   return 1;
 }
 
+=head2 C<xpl_scriptcmd(%xpl_callback_parameters)>
+
+This is the callback that processes incoming xPL messages.  It handles
+the incoming scriptcmd.basic schema messages.
+
+=cut
+
+sub xpl_scriptcmd {
+  my %p = @_;
+  my $msg = $p{message};
+  my $peeraddr = $p{peeraddr};
+  my $peerport = $p{peerport};
+  my $self = $p{arguments};
+
+  my $m_script = $msg->field('script');
+
+  # Send corresponding command to zibase
+  $self->zibase_execScript($m_script);
+
+  return 1;
+}
+
 =head2 C<zibase_command($device, $command, $protocol, $dimlevel, $nbrepeat)>
 
 Sends the specified RF command to ZiBase
@@ -263,18 +292,42 @@ sub zibase_command {
   }
 }
 
+=head2 C<zibase_execScenario($scenario)>
+
+Sends the request to ZiBase to execute a scenario
+
+=cut
+
 sub zibase_execScenario {
   my ($self, $scenario) = @_;
 
   my $zmsg = new ZiMessage();
   # Set ZiMessage parameters
   $zmsg->setRFexecScenario($scenario);
-  #$zmsg->setRFAddress($device);
   # Send it over network
   $self->zibase_send_message($zmsg);
   # Send corresponding xPL Trigger
   $self->xpl_send_scenario($scenario);
 }
+
+=head2 C<zibase_execScript($script)>
+
+Sends the request to ZiBase to execute a script
+
+=cut
+
+sub zibase_execScript {
+  my ($self, $script) = @_;
+
+  my $zmsg = new ZiMessage();
+  # Set ZiMessage parameters
+  $zmsg->setRFexecScript($script);
+  # Send it over network
+  $self->zibase_send_message($zmsg);
+  # Send corresponding xPL Trigger
+  $self->xpl_send_scenario($script);
+}
+
 
 =head2 C<zibase_message($file_handle)>
 
@@ -426,9 +479,9 @@ sub xpl_send_rfcmd {
   $self->xpl->send($xplmsg);
 }
 
-=head2 C<xpl_send_rfcmd($scenario)>
+=head2 C<xpl_send_scenario($scenario)>
 
-This method sends a x10.basic trigger message over the xPL network.
+This method sends a scenario.basic trigger message over the xPL network.
   scenario = number of the scenario to execute
 
 =cut
@@ -443,6 +496,32 @@ sub xpl_send_scenario {
                        body =>
                        [
                         scenario => lc($scenario),
+                        command => "execute",
+                       ]);
+  print $xplmsg->summary,"\n" if $self->{_verbose};
+  $self->xpl->send($xplmsg);
+}
+
+=head2 C<xpl_send_script($script)>
+
+This method sends a script.basic trigger message over the xPL network.
+  script = the command script that zibase have to execute
+  exemple "lm [toto]" launch scenario label as toto 
+          "lm 2 aft 3600" launch scenario 2 after 3600 seconds
+          "lm [toto].lm [tata]" launch scenario label as toto and after launch scenario label as tata
+		  
+=cut
+
+sub xpl_send_script {
+  my ($self, $script) = @_;
+  my $xplmsg;
+ $xplmsg =
+     xPL::Message->new(message_type => 'xpl-trig',
+                       head => { source => $self->xpl->id, },
+                       schema => 'script.basic',
+                       body =>
+                       [
+                        script => lc($scenario),
                         command => "execute",
                        ]);
   print $xplmsg->summary,"\n" if $self->{_verbose};

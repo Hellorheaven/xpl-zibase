@@ -1,9 +1,10 @@
-Revision history for xpl-zibase.0.22
+Revision history for xpl-zibase.0.22 Tue Nov 5 12:00:00 2012 
 
 - reduce duplicated code due to compatibility with 0.10
 
 - uncomment the xpl_send_x10 need for reduce duplicated code
 
+- adding script_launching according with ZAPI 1.13
 
 
 Revision history for xpl-zibase.0.21  Wed Nov 5 12:00:00 2012;

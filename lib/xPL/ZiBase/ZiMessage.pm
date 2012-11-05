@@ -220,6 +220,22 @@ sub setRFexecScenario {
   $self->{_param2} = $scenario;
 }
 
+=head2 C<setRFexecScenario($scenario)>
+
+Sets the ZiMessage to be a RF command send message with the given
+parameters :
+  scenario should be the number of scenario you would be launch 
+
+=cut
+
+sub setRFexecScript {
+  my ($self, $script) = @_;
+
+  # Sets global command type
+  $self->{_command} = 16;
+  $self->{_command_text} = $script;
+}
+
 
 
 =head2 C<setRFAddress($address)>
