@@ -131,7 +131,7 @@ sub init {
   # return $self;
   
     # Setup x10 commands hook callback
-	$xpl->add_xpl_callback(id => 'xpl-x10cmd', callback => \&xpl_x10cmd,
+	$xpl->add_xpl_callback(id => 'xpl-x10cmd', callback => \&xpl_rfcmd,
                          arguments => $self,
                          filter =>
                          {
@@ -206,38 +206,15 @@ sub xpl_rfcmd {
 
   my $m_device = $msg->field('device');
   my $m_command = $msg->field('command');
-  my $m_protocol = $msg->field('protocol');
+  my $m_protocol = 'preset';
+  no warnings 'uninitialized';
+  if ($msg->field('protocol') ne '' ) {
+    $m_protocol = $msg->field('protocol');    
+  }
   my $m_level = $msg->field('level');
   
   # Send corresponding command to zibase
   $self->zibase_command($m_device, $m_command, $m_protocol, $m_level, $repeatcnt);
-
-  return 1;
-}
-
-=head2 C<xpl_x10(%xpl_callback_parameters)>
-
-This is the callback that processes incoming xPL messages.  It handles
-the incoming x10.basic schema messages.
-
-=cut
-
-sub xpl_x10cmd {
-  my %p = @_;
-  my $msg = $p{message};
-  my $peeraddr = $p{peeraddr};
-  my $peerport = $p{peerport};
-  my $self = $p{arguments};
-
-  my $repeatcnt = $msg->field('repeat') || 1;
-
-  my $m_device = $msg->field('device');
-  my $m_command = $msg->field('command');
-  my $m_protocol = 'x10';
-  my $m_level = $msg->field('level');
-
-  # Send corresponding command to zibase
-  $self->zibase_x10command($m_device, $m_command, $m_protocol, $m_level, $repeatcnt);
 
   return 1;
 }
@@ -280,20 +257,11 @@ sub zibase_command {
   # Send it over network
   $self->zibase_send_message($zmsg);
   # Send corresponding xPL Trigger
-  $self->xpl_send_rfcmd($device, $command, $protocol, $level);
-}
-
-sub zibase_x10command {
-  my ($self, $device, $command, $protocol, $level, $nbrepeat) = @_;
-
-  my $zmsg = new ZiMessage();
-  # Set ZiMessage parameters
-  $zmsg->setRFCommand($command, $protocol, $level, $nbrepeat);
-  $zmsg->setRFAddress($device);
-  # Send it over network
-  $self->zibase_send_message($zmsg);
-  # Send corresponding xPL Trigger
-  $self->xpl_send_x10($device, $command, $protocol, $level);
+  if ($protocol eq 'x10'|| $protocol eq 'preset') {
+     $self->xpl_send_x10($device, $command, $protocol, $level);
+  } else {
+     $self->xpl_send_rfcmd($device, $command, $protocol, $level);
+  }
 }
 
 sub zibase_execScenario {
@@ -549,8 +517,8 @@ sub zibase_rfreceive_decode {
 	if ($msg =~ /Batt=\<bat\>Low\<\/bat\>/) {
 	  $self-> xpl_send_sensor($devid, 'battery', 'Low')
 	}
-	# Test if this is pure ZWAVE message
-	if ($devid =~ /^([A-P]\d\d?)_ON$/) {
+    # Test if this is pure ZWAVE message
+    if ($devid =~ /^([A-P]\d\d?)_ON$/) {
       $self->xpl_send_rfcmd($1, 'on', 6);
     }
     if ($devid =~ /^([A-P]\d\d?)_OFF$/) {

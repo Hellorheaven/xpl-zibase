@@ -8,7 +8,7 @@ use Socket;
 my $zibase_commands = {
   'off' => 0,
   'on'  => 1,
-  'dim' => 2,
+  'dim' => 3,
   'bright' => 2,
   'all_lights_on' => 4,
   'all_lights_off' => 5,
