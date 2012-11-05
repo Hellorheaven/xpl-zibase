@@ -1,4 +1,12 @@
-Revision history for xpl-zibase.0.21  Wed Nov 2 12:00:00 2012;
+Revision history for xpl-zibase.0.22
+
+- reduce duplicated code due to compatibility with 0.10
+
+- uncomment the xpl_send_x10 need for reduce duplicated code
+
+
+
+Revision history for xpl-zibase.0.21  Wed Nov 5 12:00:00 2012;
 
 - Comments the Zapinit not needed anymore(in ZAPI 1.13) for registering host to the zibase 
 
