@@ -237,8 +237,7 @@ sub setRFexecScript {
 
   # Sets global command type
   $self->{_command} = 16;
-  $self->{_message} = $script;
-  $self->{_param1} = 0;
+  $self->{_param1} = $script;
   $self->{_param2} = 0;
   $self->{_param3} = 0;
   $self->{_param4} = 0;
