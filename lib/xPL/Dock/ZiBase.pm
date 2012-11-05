@@ -207,7 +207,6 @@ sub xpl_rfcmd {
   my $m_device = $msg->field('device');
   my $m_command = $msg->field('command');
   my $m_protocol = 'preset';
-  no warnings 'uninitialized';
   if ($msg->field('protocol') ne '' ) {
     $m_protocol = $msg->field('protocol');    
   }
