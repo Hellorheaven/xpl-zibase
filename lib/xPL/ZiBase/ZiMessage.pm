@@ -76,9 +76,9 @@ sub getBinaryMessage {
   $data .= $self->{_reserved1};
   $data .= $self->{_zibase_id};
   $data .= $self->{_reserved2};
-  $data .= $self->{_command_text};
   $data .= pack('NNNN', $self->{_param1}, $self->{_param2}, $self->{_param3}, $self->{_param4});
   $data .= pack('nn', $self->{_my_count}, $self->{_your_count});
+  $data .= $self->{_message};
 
   return ($data);
 }
@@ -93,21 +93,20 @@ Payload generally is a UDP packet received from the zibase.
 sub fromPayload {
   my ($self, $payload) = @_;
 
-  my @upa = unpack("A4 n A16 A16 A12 A* N N N N n n A*", $payload);
+  my @upa = unpack("A4 n A16 A16 A12 N N N N n n A*", $payload);
 	    
   $self->{_sig} = $upa[0];	    
   $self->{_command} = $upa[1];
   $self->{_reserved1} = $upa[2];
   $self->{_zibase_id} = $upa[3];
   $self->{_reserved2} = $upa[4];
-  $self->{_command_text} = $upa[5];
-  $self->{_param1} = $upa[6];
-  $self->{_param2} = $upa[7];
-  $self->{_param3} = $upa[8];
-  $self->{_param4} = $upa[9];
-  $self->{_my_count} = $upa[10];
-  $self->{_your_count} = $upa[11];
-  $self->{_message} = $upa[12];	    
+  $self->{_param1} = $upa[5];
+  $self->{_param2} = $upa[6];
+  $self->{_param3} = $upa[7];
+  $self->{_param4} = $upa[8];
+  $self->{_my_count} = $upa[9];
+  $self->{_your_count} = $upa[10];
+  $self->{_message} = $upa[11];	    
 }
 
 
@@ -238,9 +237,7 @@ sub setRFexecScript {
 
   # Sets global command type
   $self->{_command} = 16;
-  $self->{_alphacommand} = "SendCmd";
-  $self->{_label_base} = "";
-  $self->{_command_text} = $script;
+  $self->{_message} = $script;
   $self->{_param1} = 0;
   $self->{_param2} = 0;
   $self->{_param3} = 0;
