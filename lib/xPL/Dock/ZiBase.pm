@@ -33,7 +33,7 @@ our @ISA = qw(xPL::Dock::Plug);
 our %EXPORT_TAGS = ( 'all' => [ qw() ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw();
-our $VERSION = "0.21";
+our $VERSION = "0.22";
 
 __PACKAGE__->make_readonly_accessor($_) foreach (qw/rfcom device/);
 

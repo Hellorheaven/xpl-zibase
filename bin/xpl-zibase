@@ -104,7 +104,7 @@ To launch a script:
 =head1 API VERSION
 
 This module has been developed for ZiBases supporting the ZAPI v1.13
-ZiBase firmware should be >= 559
+ZiBase firmware should be >= 695
 
 =head1 SEE ALSO
 
