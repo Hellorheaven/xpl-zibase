@@ -78,7 +78,6 @@ sub getBinaryMessage {
   $data .= pack('nn', $self->{_my_count}, $self->{_your_count});
   if ($self->{_command_text} ne "") {
     $data .= pack ('a96',$self->{_command_text});
-	#$data .= "0";
   }
 
   return ($data);
