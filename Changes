@@ -1,10 +1,19 @@
-Revision history for xpl-zibase.0.22 Tue Nov 5 12:00:00 2012 
+Revision history for xpl-zibase.0.22 Tue Nov 6 08:00:00 2012 
 
 - reduce duplicated code due to compatibility with 0.10
 
 - uncomment the xpl_send_x10 need for reduce duplicated code
 
 - adding script_launching according with ZAPI 1.13
+to use it:
+xpl-sender -m xpl-cmnd -c script.basic script="cmd:lm 1 aft 60"
+
+"cmd:lm [toto]" launch scenario label as toto
+"cmd:lm 2 aft 3600" launch scenario 2 after 3600 seconds
+"cmd:lm [toto].lm [tata]" launch scenario label as toto and after launch
+scenario label as tata
+label of a scenario with space doesn't work you to use an underscore
+instead of space caractere
 
 
 Revision history for xpl-zibase.0.21  Wed Nov 5 12:00:00 2012;

@@ -88,8 +88,19 @@ The client also support dimming levels (only for Chacon and X2D devices) :
   xpl-sender -m xpl-cmnd -c rfcmd.basic device=a10 command=dim protocol=zwave level=50
   
 To execute the scenario number 15:
-   xpl-sender -m xpl-cmnd -c scencmd.basic scenario=15
+  xpl-sender -m xpl-cmnd -c scencmd.basic scenario=15
+   
+To launch a script:   
+  xpl-sender -m xpl-cmnd -c script.basic script="cmd:lm 1 aft 60"
 
+  "cmd:lm [toto]" launch scenario label as toto
+  "cmd:lm 2 aft 3600" launch scenario 2 after 3600 seconds
+  "cmd:lm [toto].lm [tata]" launch scenario label as toto and after launch scenario label as tata
+  Don't forgot double quote
+  label of a scenario with space doesn't work you to use an underscore instead of space caractere
+  
+  
+  
 =head1 API VERSION
 
 This module has been developed for ZiBases supporting the ZAPI v1.13
