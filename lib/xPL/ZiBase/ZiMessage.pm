@@ -9,7 +9,7 @@ my $zibase_commands = {
   'off' => 0,
   'on'  => 1,
   'dim' => 2,
-  'bright' => 2,
+  'bright' => 3,
   'all_lights_on' => 4,
   'all_lights_off' => 5,
   'all_off' => 6,
@@ -195,7 +195,7 @@ sub setRFCommand {
 
   # Sets the dim level if needed
   if ($prm == $zibase_commands->{'dim'}) {
-    $prm = $prm | (($level & 0xFF) << 0x16);
+    $prm = $prm | ((int($level) & 0xFF) << 0x16);
   }
 
   # Sets the burst if specified
