@@ -9,7 +9,7 @@ my $zibase_commands = {
   'off' => 0,
   'on'  => 1,
   'dim' => 2,
-  'bright' => 3,
+  'bright' => 2,
   'all_lights_on' => 4,
   'all_lights_off' => 5,
   'all_off' => 6,
@@ -35,6 +35,18 @@ my $zibase_protocol = {
   'xdd868boac' => 12,
 };
 
+my $zibase_vpprotocol = {
+  'oregon' => 17,
+  'owl'  => 20,
+};
+
+my $zibase_vptype = {
+  'temp_sensor' => 0,
+  'temp_hum_sensor' => 1,
+  'power_sensor' => 2,
+  'water_sensor' => 3,
+}; 
+  
 # new()
 sub new
 {
@@ -240,6 +252,48 @@ sub setRFexecScript {
   $self->{_command_text} = $script;
   }
 
+=head2 C<setVPEvent($id, $type, $c1, $c2, $batt)>
+
+
+
+=cut
+
+sub setVPEvent {
+  my ($self, $id, $type, $c1, $c2, $batt) = @_;
+
+  # Sets global command type
+  $self->{_command} = 11;
+  $self->{_param1} = 6;
+  
+  # Sets Virtual probe type 
+  my $vptype = $zibase_vptype->{lc($type)};
+  
+  if ($vptype ne '2') {
+    $self->{_param4} = $zibase_vpprotocol->{'oregon'};
+	# THN132
+	if ($vptype eq '0') {
+	$self->{_param2} = (0x1) << 0x16 | $id;
+	}
+	# THGR228 oregon
+	if ($vptype eq '1') {
+	$self->{_param2} = (0x1a2d) << 0x16 | $id;
+	}
+	# Water sensor oregon
+	if ($vptype eq '3') {
+	$self->{_param2} = (0x2a19) << 0x16 | $id;
+	}
+  } else {
+    # Power meter OWL 
+	$self->{_param4} = $zibase_vpprotocol->{'owl'};   
+    $self->{_param2} = (0x2) << 0x16 | $id;  
+  }
+  
+  #set values  
+  $prm = $c1;
+  $prm = $prm | ($c2) << 0x16);
+  $prm = $prm | ($batt) << 0x24);
+  $self->{_param3} = $prm;
+}
 
 
 =head2 C<setRFAddress($address)>

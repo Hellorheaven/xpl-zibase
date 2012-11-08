@@ -1,3 +1,15 @@
+Revision history for xpl-zibase.0.23 Tue Nov 8 23:47:00 2012
+- adding the virtual probe event
+To set Virtual Probe Event:
+  xpl-sender -m xpl-cmnd -c vpevnt.basic type=temp_hum_sensor c1=184 c2=20 batt=1 id=145879
+  this is create a virtual prob event with temp 18,4 degree Celsius 20 pourcent of humidity and with a low battery with the id 145879
+  type of virtual probe could be create:
+    - temp_sensor
+	- temp_hum_sensor
+	- power_sensor
+	- water_sensor  
+
+
 Revision history for xpl-zibase.0.22 Tue Nov 6 08:00:00 2012 
 
 - reduce duplicated code due to compatibility with 0.10

@@ -33,7 +33,7 @@ our @ISA = qw(xPL::Dock::Plug);
 our %EXPORT_TAGS = ( 'all' => [ qw() ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw();
-our $VERSION = "0.22";
+our $VERSION = "0.23";
 
 __PACKAGE__->make_readonly_accessor($_) foreach (qw/rfcom device/);
 
@@ -158,6 +158,16 @@ sub init {
                           class => 'script',
                           class_type => 'basic',
                          });
+						 
+  # Setup virtual probe event hook callback
+  $xpl->add_xpl_callback(id => 'xpl-vpevnt', callback => \&xpl_vpevnt,
+                         arguments => $self,
+                         filter =>
+                         {
+                          message_type => 'xpl-cmnd',
+                          class => 'vpevnt',
+                          class_type => 'basic',
+                         });
 
   return $self;
   
@@ -209,7 +219,7 @@ sub xpl_rfcmd {
   my $peerport = $p{peerport};
   my $self = $p{arguments};
 
-  my $repeatcnt = $msg->field('repeat') || 1;
+  my $repeatcnt = $msg->field('repeat') || 0;
 
   my $m_device = $msg->field('device');
   my $m_command = $msg->field('command');
@@ -265,6 +275,33 @@ sub xpl_scriptcmd {
 
   # Send corresponding command to zibase
   $self->zibase_execScript($m_script);
+
+  return 1;
+}
+
+=head2 C<xpl_vpevnt(%xpl_callback_parameters)>
+
+This is the callback that processes incoming xPL messages.  It handles
+the incoming vpevnt.basic schema messages.
+
+=cut
+
+sub xpl_vpevnt {
+  my %p = @_;
+  my $msg = $p{message};
+  my $peeraddr = $p{peeraddr};
+  my $peerport = $p{peerport};
+  my $self = $p{arguments};
+
+  my $m_id = $msg->field('id');
+
+  my $m_type = $msg->field('type');
+  my $m_c1 = $msg->field('c1');
+  my $m_c2 = $msg->field('c2');
+  my $m_batt = $msg->field('batt');
+ 
+  # Send corresponding command to zibase
+  $self->zibase_vpevnt($m_id, $m_type, $m_c1, $m_c2, $batt);
 
   return 1;
 }
@@ -326,6 +363,24 @@ sub zibase_execScript {
   $self->zibase_send_message($zmsg);
   # Send corresponding xPL Trigger
   $self->xpl_send_script($script);
+}
+
+=head2 C<zibase_vpevnt($id, $type, $c1, $c2, $batt)>
+
+Sends the specified virtual probe event to ZiBase
+
+=cut
+
+sub zibase_vpevnt {
+  my ($self, $id, $type, $c1, $c2, $batt) = @_;
+
+  my $zmsg = new ZiMessage();
+  # Set ZiMessage parameters
+  $zmsg->setVPEvent($id, $type, $c1, $c2, $batt);
+  # Send it over network
+  $self->zibase_send_message($zmsg);
+  # Send corresponding xPL Trigger
+  $self->xpl_send_vpevnt($id, $type, $c1, $c2, $batt);
 }
 
 
@@ -523,6 +578,32 @@ sub xpl_send_script {
                        [
                         script => $script,
                         command => "execute",
+                       ]);
+  print $xplmsg->summary,"\n" if $self->{_verbose};
+  $self->xpl->send($xplmsg);
+}
+
+=head2 C<xpl_send_vpevnt($id, $type, $c1, $c2, $batt)>
+
+This method sends a vpevnt.basic trigger message over the xPL network.
+
+=cut
+
+sub xpl_send_vpevnt {
+  my ($self, $id, $type, $c1, $c2, $batt) = @_;
+  my $xplmsg;
+ $xplmsg =
+     xPL::Message->new(message_type => 'xpl-trig',
+                       head => { source => $self->xpl->id, },
+                       schema => 'vpevnt.basic',
+                       body =>
+                       [
+                        id => $id,
+						type => lc($type),
+                        command => "vpevent",
+						c1 => $c1,
+						c2 => $c2,
+						batt => $batt,
                        ]);
   print $xplmsg->summary,"\n" if $self->{_verbose};
   $self->xpl->send($xplmsg);

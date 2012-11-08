@@ -99,6 +99,14 @@ To launch a script:
   Don't forgot double quote
   label of a scenario with space doesn't work you to use an underscore instead of space caractere
   
+To set Virtual Probe Event:
+  xpl-sender -m xpl-cmnd -c vpevnt.basic type=temp_hum_sensor c1=184 c2=20 batt=1 id=145879
+  this is create a virtual prob event with temp 18,4 degree Celsius 20 pourcent of humidity and with a low battery with the id 145879
+  type of virtual probe could be create:
+    - temp_sensor
+	- temp_hum_sensor
+	- power_sensor
+	- water_sensor  
   
   
 =head1 API VERSION
