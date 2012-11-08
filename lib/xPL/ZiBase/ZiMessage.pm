@@ -272,15 +272,15 @@ sub setVPEvent {
     $self->{_param4} = $zibase_vpprotocol->{'oregon'};
 	# THN132
 	if ($vptype eq '0') {
-	$self->{_param2} = (0x1) << 0x16 | $id;
+	$self->{_param2} = (0x1) << 0x16;
 	}
 	# THGR228 oregon
 	if ($vptype eq '1') {
-	$self->{_param2} = (0x1a2d) << 0x16 | $id;
+	$self->{_param2} = (0x1a2d) << 0x16;
 	}
 	# Water sensor oregon
 	if ($vptype eq '3') {
-	$self->{_param2} = (0x2a19) << 0x16 | $id;
+	$self->{_param2} = (0x2a19) << 0x16;
 	}
   } else {
     # Power meter OWL 
