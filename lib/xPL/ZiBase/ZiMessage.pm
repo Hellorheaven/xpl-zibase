@@ -290,8 +290,8 @@ sub setVPEvent {
   
   #set values  
   $prm = $c1;
-  $prm = $prm | ($c2) << 16;
-  $prm = $prm | ($batt) << 24;
+  $prm = $prm | ($c2) << 0x16;
+  $prm = $prm | ($batt) << 0x24;
   $self->{_param3} = $prm;
 }
 
