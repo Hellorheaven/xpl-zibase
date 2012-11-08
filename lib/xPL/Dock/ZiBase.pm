@@ -301,7 +301,7 @@ sub xpl_vpevnt {
   my $m_batt = $msg->field('batt');
  
   # Send corresponding command to zibase
-  $self->zibase_vpevnt($m_id, $m_type, $m_c1, $m_c2, $batt);
+  $self->zibase_vpevnt($m_id, $m_type, $m_c1, $m_c2, $m_batt);
 
   return 1;
 }
