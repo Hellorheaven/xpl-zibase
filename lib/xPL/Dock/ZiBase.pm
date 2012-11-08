@@ -639,11 +639,11 @@ sub zibase_rfreceive_decode {
     }
     # Test current rain
     if ($msg =~ /\<cra\>(.*)\<\/cra\>/) {
-      $self->xpl_send_sensor($devid, 'speed', $1);
+      $self->xpl_send_sensor($devid, 'current_rain', $1);
     }
     # Test Total Rain
     if ($msg =~ /\<tra\>(.*)\<\/tra\>/) {
-      $self->xpl_send_sensor($devid, 'distance', $1);
+      $self->xpl_send_sensor($devid, 'total_rain', $1);
     }
     # Test Humidity
     if ($msg =~ /\<hum\>(.*)\<\/hum\>/) {
