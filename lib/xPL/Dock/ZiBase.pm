@@ -380,7 +380,7 @@ sub zibase_vpevnt {
   # Send it over network
   $self->zibase_send_message($zmsg);
   # Send corresponding xPL Trigger
-  $self->xpl_send_vpevnt($id, $type, $c1, $c2, $batt);
+  # $self->xpl_send_vpevnt($id, $type, $c1, $c2, $batt);
 }
 
 
@@ -583,31 +583,31 @@ sub xpl_send_script {
   $self->xpl->send($xplmsg);
 }
 
-=head2 C<xpl_send_vpevnt($id, $type, $c1, $c2, $batt)>
+# =head2 C<xpl_send_vpevnt($id, $type, $c1, $c2, $batt)>
 
-This method sends a vpevnt.basic trigger message over the xPL network.
+# This method sends a vpevnt.basic trigger message over the xPL network.
 
-=cut
+# =cut
 
-sub xpl_send_vpevnt {
-  my ($self, $id, $type, $c1, $c2, $batt) = @_;
-  my $xplmsg;
- $xplmsg =
-     xPL::Message->new(message_type => 'xpl-trig',
-                       head => { source => $self->xpl->id, },
-                       schema => 'vpevnt.basic',
-                       body =>
-                       [
-                        id => $id,
-						type => lc($type),
-                        command => "vpevent",
-						c1 => $c1,
-						c2 => $c2,
-						batt => $batt,
-                       ]);
-  print $xplmsg->summary,"\n" if $self->{_verbose};
-  $self->xpl->send($xplmsg);
-}
+# sub xpl_send_vpevnt {
+ # my ($self, $id, $type, $c1, $c2, $batt) = @_;
+ # my $xplmsg;
+ # $xplmsg =
+     # xPL::Message->new(message_type => 'xpl-trig',
+                       # head => { source => $self->xpl->id, },
+                       # schema => 'vpevnt.basic',
+                       # body =>
+                       # [
+                        # id => $id,
+						# type => lc($type),
+                        # command => "vpevent",
+						# c1 => $c1,
+						# c2 => $c2,
+						# batt => $batt,
+                       # ]);
+  # print $xplmsg->summary,"\n" if $self->{_verbose};
+  # $self->xpl->send($xplmsg);
+# }
 
 
 sub zibase_rfreceive_decode {
