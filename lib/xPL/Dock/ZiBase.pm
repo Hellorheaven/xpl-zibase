@@ -219,15 +219,11 @@ sub xpl_rfcmd {
   my $peerport = $p{peerport};
   my $self = $p{arguments};
 
-  my $repeatcnt = $msg->field('repeat');
+  my $repeatcnt = $msg->field('repeat')||0;
 
   my $m_device = $msg->field('device');
   my $m_command = $msg->field('command');
-  my $m_protocol = 'preset';
-  no warnings 'uninitialized';
-  if ($msg->field('protocol') ne '' ) {
-    $m_protocol = $msg->field('protocol');    
-  }
+  my $m_protocol = $msg->field('protocol')||'preset';    
   my $m_level = $msg->field('level');
   
   # Send corresponding command to zibase
