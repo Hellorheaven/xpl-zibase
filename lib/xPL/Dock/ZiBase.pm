@@ -227,7 +227,7 @@ sub xpl_rfcmd {
   my $m_level = $msg->field('level');
   
   # Send corresponding command to zibase
-  $self->zibase_command($m_device, $m_command, $m_protocol, $m_level, $repeatcnt);
+  $self->zibase_command($m_device, $m_command, $m_protocol, $m_level, $repeatcnt, $peeraddr);
 
   return 1;
 }
@@ -303,18 +303,18 @@ sub xpl_vpevnt {
   return 1;
 }
 
-=head2 C<zibase_command($device, $command, $protocol, $dimlevel, $nbrepeat)>
+=head2 C<zibase_command($device, $command, $protocol, $dimlevel, $nbrepeat, $peeraddr)>
 
 Sends the specified RF command to ZiBase
 
 =cut
 
 sub zibase_command {
-  my ($self, $device, $command, $protocol, $level, $nbrepeat) = @_;
+  my ($self, $device, $command, $protocol, $level, $nbrepeat, $peeraddr) = @_;
 
   my $zmsg = new ZiMessage();
   # Set ZiMessage parameters
-  $zmsg->setRFCommand($command, $protocol, $level, $nbrepeat);
+  $zmsg->setRFCommand($command, $protocol, $level, $nbrepeat, $peeraddr, $device);
   $zmsg->setRFAddress($device);
   # Send it over network
   $self->zibase_send_message($zmsg);

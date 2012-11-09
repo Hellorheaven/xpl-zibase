@@ -3,6 +3,8 @@
 package ZiMessage;
 
 use Socket;
+use WWW::Mechanize;
+
 
 
 my $zibase_commands = {
@@ -192,8 +194,8 @@ parameters :
 =cut
 
 sub setRFCommand {
-  my ($self, $command, $protocol, $level, $nbrepeat) = @_;
-
+  my ($self, $command, $protocol, $level, $nbrepeat, $peeraddr) = @_;
+  
   # Sets global command type
   $self->{_command} = 11;
   $self->{_param1} = 0;
@@ -203,18 +205,25 @@ sub setRFCommand {
   
   # Sets the Protocol code
   my $proto = $zibase_protocol->{lc($protocol)};
-  $prm = $prm | (($proto) << 8);
+  if ($proto eq 6 and $prm == $zibase_commands->{'dim'}){
+    my $www = WWW::Mechanize->new;
+	$device = lc($device);
+    $www->put( 'http://${peeraddr}/cgi-bin/domo.cgi?cmd= DIM ${device} P6 ${level}');
+	print $www->content();
+	
+  } else {
+    $prm = $prm | (($proto) << 8);
 
-  # Sets the dim level if needed
-  if ($prm == $zibase_commands->{'dim'}) {
-    $prm = $prm | (($level)  << 16);
+    # Sets the dim level if needed
+    if ($prm == $zibase_commands->{'dim'}) {
+      $prm = $prm | (($level)  << 16);
+    }
+
+    # Sets the burst if specified
+    if (defined($nbrepeat) && $nbrepeat > 1) {
+      $prm = $prm | (($nbrepeat) << 24);
+    }
   }
-
-  # Sets the burst if specified
-  if (defined($nbrepeat) && $nbrepeat > 1) {
-    $prm = $prm | (($nbrepeat) << 24);
-  }
-
   $self->{_param2} = $prm;
 
 }
