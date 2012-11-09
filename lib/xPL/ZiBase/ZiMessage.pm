@@ -209,7 +209,7 @@ sub setRFCommand {
     my $www = WWW::Mechanize->new;
 	$device = lc($device);
 	$url = 'http://'.$peeraddr.'/cgi-bin/domo.cgi?cmd= DIM '.$device.' P6 '.$level.'';
-    $www->put( $url);
+    $www->get( $url);
 	print $www->content();
 	
   } else {
