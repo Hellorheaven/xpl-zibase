@@ -208,7 +208,8 @@ sub setRFCommand {
   if ($proto eq 6 and $prm == $zibase_commands->{'dim'}){
     my $www = WWW::Mechanize->new;
 	$device = lc($device);
-	$url = 'http://'.$self->{_zibase_ip}.'/cgi-bin/domo.cgi?cmd= DIM '.$device.' P6 '.$level.'';
+	$ipaddr = $self->{_zibase_ip};
+	$url = 'http://'.$ipaddr.'/cgi-bin/domo.cgi?cmd= DIM '.$device.' P6 '.$level.'';
     $www->get( $url);
 	print $www->content();
 	
