@@ -197,13 +197,12 @@ sub setRFCommand {
   my ($self, $command, $protocol, $level, $nbrepeat, $peeraddr, $device) = @_;
   
   # Sets the HA command code
-  my $prm = $zibase_commands->{lc($command)};
+  my $prm = $zibase_commands->{$command};
   
   # Sets the Protocol code
-  my $proto = $zibase_protocol->{lc($protocol)};
-  if ($proto eq 6 and $prm == $zibase_commands->{'dim'}){
+  my $proto = $zibase_protocol->{$protocol};
+  if ($protocol eq 'zwave' && ($command eq 'dim' || $command eq 'bright')){
     my $www = WWW::Mechanize->new;
-	$device = uc($device);
 	$url = 'http://'.$peeraddr.'/cgi-bin/domo.cgi?cmd=DIM '.$device.' P6 '.$level.' ';
     $www->get($url);
 	print $www->content();
