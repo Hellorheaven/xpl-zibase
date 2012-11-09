@@ -203,16 +203,16 @@ sub setRFCommand {
   
   # Sets the Protocol code
   my $proto = $zibase_protocol->{lc($protocol)};
-  $prm = $prm | (($proto & 0xFF) << 8);
+  $prm = $prm | (($proto) << 8);
 
   # Sets the dim level if needed
   if ($prm == $zibase_commands->{'dim'}) {
-    $prm = $prm | (($level & 0xFF)  << 10);
+    $prm = $prm | (($level)  << 10);
   }
 
   # Sets the burst if specified
   if (defined($nbrepeat) && $nbrepeat > 1) {
-    $prm = $prm | (($nbrepeat & 0xFF) << 18);
+    $prm = $prm | (($nbrepeat) << 18);
   }
 
   $self->{_param2} = $prm;
