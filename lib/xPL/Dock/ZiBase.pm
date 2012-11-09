@@ -320,6 +320,7 @@ sub zibase_command {
   if (lc($protocol) ne 'zwave' && lc($command) ne 'dim'){
     $self->zibase_send_message($zmsg);
   }
+  print lc($protocol);
   # Send corresponding xPL Trigger
   if ($protocol eq 'x10'|| $protocol eq 'preset') {
      $self->xpl_send_x10($device, $command, $protocol, $level);
