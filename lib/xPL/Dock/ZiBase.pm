@@ -219,7 +219,7 @@ sub xpl_rfcmd {
   my $peerport = $p{peerport};
   my $self = $p{arguments};
 
-  my $repeatcnt = $msg->field('repeat') || 0;
+  my $repeatcnt = $msg->field('repeat');
 
   my $m_device = $msg->field('device');
   my $m_command = $msg->field('command');
