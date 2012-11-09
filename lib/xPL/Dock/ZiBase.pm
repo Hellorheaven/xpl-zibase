@@ -319,7 +319,9 @@ sub zibase_command {
   # Send it over network
   $protocol=lc($protocol);
   $command=lc($command);
-  if ($protocol ne 'zwave' && $command ne 'dim'){
+  if ($protocol eq 'zwave' && ($command eq 'dim' || $command eq 'bright')){
+    print '\n';
+  } else {
     $self->zibase_send_message($zmsg);
   }
   # Send corresponding xPL Trigger
