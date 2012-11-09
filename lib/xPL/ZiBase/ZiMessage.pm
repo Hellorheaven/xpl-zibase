@@ -201,7 +201,7 @@ sub setRFCommand {
   
   # Sets the Protocol code
   my $proto = $zibase_protocol->{lc($protocol)};
-  if ($proto eq 6 and $prm == $zibase_commands->{'dim'}){
+  if (lc($protocol) ne 'zwave' and (lc($command) ne 'dim' or lc($command) ne 'bright')){
     my $www = WWW::Mechanize->new;
 	$device = uc($device);
 	$url = 'http://'.$peeraddr.'/cgi-bin/domo.cgi?cmd=DIM '.$device.' P6 '.$level.' ';
