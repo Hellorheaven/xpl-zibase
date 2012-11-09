@@ -317,7 +317,9 @@ sub zibase_command {
   $zmsg->setRFCommand($command, $protocol, $level, $nbrepeat, $self->{_zibase_ip}, $device);
   $zmsg->setRFAddress($device);
   # Send it over network
-  $self->zibase_send_message($zmsg);
+  if (lc($protocol) ne 'zwave' and (lc($command) ne 'dim' or lc($command) ne 'bright')){
+    $self->zibase_send_message($zmsg);
+  }
   # Send corresponding xPL Trigger
   if ($protocol eq 'x10'|| $protocol eq 'preset') {
      $self->xpl_send_x10($device, $command, $protocol, $level);

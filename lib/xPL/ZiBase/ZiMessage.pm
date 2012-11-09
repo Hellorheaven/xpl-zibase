@@ -196,10 +196,6 @@ parameters :
 sub setRFCommand {
   my ($self, $command, $protocol, $level, $nbrepeat, $peeraddr, $device) = @_;
   
-  # Sets global command type
-  $self->{_command} = 11;
-  $self->{_param1} = 0;
-
   # Sets the HA command code
   my $prm = $zibase_commands->{lc($command)};
   
@@ -213,6 +209,10 @@ sub setRFCommand {
 	print $www->content();
 	
   } else {
+    # Sets global command type
+    $self->{_command} = 11;
+    $self->{_param1} = 0;
+  
     $prm = $prm | (($proto) << 8);
 
     # Sets the dim level if needed
@@ -224,8 +224,9 @@ sub setRFCommand {
     if (defined($nbrepeat) && $nbrepeat > 1) {
       $prm = $prm | (($nbrepeat) << 24);
     }
+	$self->{_param2} = $prm;
   }
-  $self->{_param2} = $prm;
+  
 
 }
 
