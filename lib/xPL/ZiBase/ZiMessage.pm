@@ -194,7 +194,7 @@ parameters :
 =cut
 
 sub setRFCommand {
-  my ($self, $command, $protocol, $level, $nbrepeat, $peeraddr) = @_;
+  my ($self, $command, $protocol, $level, $nbrepeat, $peeraddr, $device) = @_;
   
   # Sets global command type
   $self->{_command} = 11;
