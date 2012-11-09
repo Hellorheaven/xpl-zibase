@@ -207,12 +207,12 @@ sub setRFCommand {
 
   # Sets the dim level if needed
   if ($prm == $zibase_commands->{'dim'}) {
-    $prm = $prm | (($level)  << 16);
+    $prm = $prm | (($level & 0xFF)  << 10);
   }
 
   # Sets the burst if specified
   if (defined($nbrepeat) && $nbrepeat > 1) {
-    $prm = $prm | (($nbrepeat & 0xFF) << 24);
+    $prm = $prm | (($nbrepeat & 0xFF) << 18);
   }
 
   $self->{_param2} = $prm;
