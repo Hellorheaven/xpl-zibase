@@ -314,13 +314,13 @@ sub zibase_command {
 
   my $zmsg = new ZiMessage();
   # Set ZiMessage parameters
+  $protocol=lc($protocol);
+  $command=lc($command);
   $zmsg->setRFCommand($command, $protocol, $level, $nbrepeat, $self->{_zibase_ip}, $device);
   $zmsg->setRFAddress($device);
   # Send it over network
-  $protocol=lc($protocol);
-  $command=lc($command);
   if ($protocol eq 'zwave' && ($command eq 'dim' || $command eq 'bright')){
-    print '\n';
+
   } else {
     $self->zibase_send_message($zmsg);
   }
