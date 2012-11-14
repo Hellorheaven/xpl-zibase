@@ -316,9 +316,9 @@ parameters :
 =cut
 
 sub setRFAddress {
-  my ($self, $device) = @_;
+  my ($self, $device, $protocol) = @_;
 
-  my ($nb1, $nb2) = $self->decode_x10_address($device);
+  my ($nb1, $nb2) = $self->decode_x10_address($device, $protocol);
   $self->{_param3} = $nb2;
   $self->{_param4} = $nb1;
 }
@@ -331,11 +331,16 @@ Returns an array of two integers representing the house and unit codes.
 =cut
 
 sub decode_x10_address {
-  my ($self, $address) = @_;
+  my ($self, $address, $protocol) = @_;
 
   #$device = lc($device);
-  my $nb1 = ord($address) - ord('a');
-  my $nb2 = int(substr($address, 1)) - 1;
+  if ($protocol eq 'zwave' || if ($protocol eq 'x10') {
+    my $nb1 = ord($address) - ord('a');
+    my $nb2 = int(substr($address, 1)) - 1;
+  } else {
+    my $nb1 = ord($address) - ord('a');
+    my $nb2 = int(substr($address, 2)) - 1;
+  }
   return ($nb1, $nb2);
 }
 

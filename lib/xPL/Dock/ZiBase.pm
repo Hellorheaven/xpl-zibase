@@ -317,7 +317,7 @@ sub zibase_command {
   $protocol=lc($protocol);
   $command=lc($command);
   $zmsg->setRFCommand($command, $protocol, $level, $nbrepeat, $self->{_zibase_ip}, $device);
-  $zmsg->setRFAddress($device);
+  $zmsg->setRFAddress($device, $protocol);
   # Send it over network
   if (($command eq 'dim' || $command eq 'bright') && $protocol eq 'zwave'){
   } else {
@@ -515,10 +515,10 @@ sub xpl_send_rfcmd {
                        schema => 'rfcmd.basic',
                        body =>
                        [
-                        device => lc($device),
-                        command => lc($command),
-                        protocol => lc($protocol),
-			level => $level,
+						device => lc($device),
+						command => lc($command),
+						protocol => lc($protocol),
+						level => $level,
                        ]);
   } else {
     $xplmsg =
@@ -678,27 +678,45 @@ sub zibase_rfreceive_decode {
 	if ($msg =~ /Batt=\<bat\>Low\<\/bat\>/) {
 	  $self-> xpl_send_sensor($devid, 'battery', 'Low')
 	}
-    # Test if this is pure ZWAVE message
-    if ($devid =~ /^([A-P]\d\d?)_ON$/) {
-      $self->xpl_send_rfcmd($1, 'on', 6);
-    }
-    if ($devid =~ /^([A-P]\d\d?)_OFF$/) {
-      $self->xpl_send_rfcmd($1, 'off', 6);
-    }
 	if ($devid =~ /^(Z[A-P]\d\d?)_ON$/) {
-      $self->xpl_send_rfcmd($1, 'on', 6);
+      $self->xpl_send_rfcmd($1, 'on', 'zwave', 100);
     }
     if ($devid =~ /^(Z[A-P]\d\d?)_OFF$/) {
-      $self->xpl_send_rfcmd($1, 'off', 6);
+      $self->xpl_send_rfcmd($1, 'off', 'zwave', 0);
     }
     # Finally test if this is a pure X10 message
     if ($devid =~ /^([A-P]\d\d?)$/) {
-      $self->xpl_send_x10($1, 'on', 0);
+      $self->xpl_send_x10($1, 'on', 'x10', 100);
     }
     if ($devid =~ /^([A-P]\d\d?)_OFF$/) {
-      $self->xpl_send_x10($1, 'off', 0);
+      $self->xpl_send_x10($1, 'off', 'x10', 0);
     }
-  }
+  } 
+  # elsif  ($msg =~ /^Sent radio ID\ /) {
+    
+	# Test if this is pure ZWAVE message
+	# if ($devid =~ /^(Z[A-P]\d\d?)_ON$/) {
+      # $self->xpl_send_rfcmd($1, 'on', 'zwave', 100);
+    # }
+    # if ($devid =~ /^(Z[A-P]\d\d?)_OFF$/) {
+      # $self->xpl_send_rfcmd($1, 'off', 'zwave', 0);
+    # }
+	# if ($devid =~ /^([A-P]\d\d?)_DIM/SPECIAL$/) {
+      # $self->xpl_send_rfcmd($1, 'dim', 'zwave');
+    # }
+	# if ($devid =~ /^(Z[A-P]\d\d?)_DIM/SPECIAL$/) {
+      # $self->xpl_send_rfcmd($1, 'dim', 'zwave');
+    # }
+    # Finally test if this is a pure X10 message
+    # if ($devid =~ /^([A-P]\d\d?)$/) {
+      # $self->xpl_send_x10($1, 'on', 'x10', 100);
+    # }
+    # if ($devid =~ /^([A-P]\d\d?)_OFF$/) {
+      # $self->xpl_send_x10($1, 'off', 'x10', 0);
+    # }
+	# if ($devid =~ /^([A-P]\d\d?)_DIM/SPECIAL$/) {
+      # $self->xpl_send_x10($1, 'dim', 'x10');
+    # }
 }
 
 1;
