@@ -317,7 +317,7 @@ sub zibase_command {
   $protocol=lc($protocol);
   $command=lc($command);
   $zmsg->setRFCommand($command, $protocol, $level, $nbrepeat, $self->{_zibase_ip}, $device);
-  $zmsg->setRFAddress($device, $protocol);
+  $zmsg->setRFAddress($device);
   # Send it over network
   if (($command eq 'dim' || $command eq 'bright') && $protocol eq 'zwave'){
   } else {
