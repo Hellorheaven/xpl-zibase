@@ -338,8 +338,10 @@ sub decode_x10_address {
     my $nb1 = ord($address) - ord('a');
     my $nb2 = int(substr($address, 1)) - 1;
   } else {
-    my $nb1 = ord($address) - ord('a');
+    my $nb1 = ord($address) - ord('aa');
+	print $nb1;
     my $nb2 = int(substr($address, 2)) - 1;
+	print $nb2;
   }
   return ($nb1, $nb2);
 }
