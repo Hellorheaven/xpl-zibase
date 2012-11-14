@@ -334,7 +334,7 @@ sub decode_x10_address {
   my ($self, $address, $protocol) = @_;
 
   #$device = lc($device);
-  if ($protocol eq 'zwave' || if ($protocol eq 'x10') {
+  if ($protocol eq 'zwave' || $protocol eq 'x10') {
     my $nb1 = ord($address) - ord('a');
     my $nb2 = int(substr($address, 1)) - 1;
   } else {
