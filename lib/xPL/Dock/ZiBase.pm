@@ -38,7 +38,7 @@ our $VERSION = "0.23";
 __PACKAGE__->make_readonly_accessor($_) foreach (qw/rfcom device/);
 
 
-my $vendor_id = 'tlam';
+my $vendor_id = 'domoserv';
 
 
 =head2 C<getopts( )>
@@ -630,8 +630,10 @@ sub zibase_rfreceive_decode {
       $devid = "pcr800.".$devid;
     }
 
+	
+
     # Test status value (for Home Automation remotes)
-    if ($msg =~ /\<sta\>\+?(.*)\<\/sta\>/) {
+	if ($msg =~ /\<sta\>\+?(.*)\<\/sta\>/) {
       my $sta = $1;
       $self->xpl_send_sensor($devid, 'input', ($sta eq "ON") ? "high" : "low");
     }
@@ -678,6 +680,10 @@ sub zibase_rfreceive_decode {
 	if ($msg =~ /Batt=\<bat\>Low\<\/bat\>/) {
 	  $self-> xpl_send_sensor($devid, 'battery', 'Low')
 	}
+	if ($msg =~ /\<dev\>\+?(.*)\<\/dev\>/) {
+      my $dev = $1;
+      $self->xpl_send_sensor($devid, 'input', ($dev eq "CMD") ? "high" : "low");
+    }
 	if ($devid =~ /^(Z[A-P]\d\d?)_ON$/) {
       $self->xpl_send_rfcmd($1, 'on', 'zwave', 100);
     }
