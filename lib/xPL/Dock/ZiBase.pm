@@ -683,10 +683,10 @@ sub zibase_rfreceive_decode {
 	if ($msg =~ /\<dev\>\+?(.*)\<\/dev\>/) {
       my $dev = $1;
 	  if ($dev eq "CMD") {
-		$self->xpl_send_sensor($devid, 'cmd', '1');
+		$self->xpl_send_sensor($devid, 'cmd', 'On');
 	  } elsif ($dev eq "Visonic") {
 	    if ($msg =~ /Flags= \<flag1\>Alarm\<\/flag1\>/) {
-		  $self->xpl_send_sensor($devid, 'alarm', '1');
+		  $self->xpl_send_sensor($devid, 'alarm', 'On');
 		}
 	  }
     }
