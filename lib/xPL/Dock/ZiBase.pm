@@ -682,7 +682,12 @@ sub zibase_rfreceive_decode {
 	}
 	if ($msg =~ /\<dev\>\+?(.*)\<\/dev\>/) {
       my $dev = $1;
-      $self->xpl_send_sensor($devid, 'input', ($dev eq "CMD") ? "high" : "low");
+	  if ($dev eq "CMD") {
+		$self->xpl_send_sensor($devid, 'cmd', '1');
+	  } elsif ($dev eq "Visonic") {
+	    if ($msg =~ .Flags= \<flag1\>Alarm\<\/flag1\>/) {
+		  $self->xpl_send_sensor($devid, 'alarm', '1');
+		}
     }
 	if ($devid =~ /^(Z[A-P]\d\d?)_ON$/) {
       $self->xpl_send_rfcmd($1, 'on', 'zwave', 100);
