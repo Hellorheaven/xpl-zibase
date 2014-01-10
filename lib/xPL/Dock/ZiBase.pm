@@ -690,11 +690,14 @@ sub zibase_rfreceive_decode {
 		}
 	  }
     }
-	if ($devid =~ /^(Z[A-P]\d\d?)_ON$/) {
+    if ($devid =~ /^(Z[A-P]\d\d?)_ON$/) {
       $self->xpl_send_rfcmd($1, 'on', 'zwave', 100);
     }
     if ($devid =~ /^(Z[A-P]\d\d?)_OFF$/) {
       $self->xpl_send_rfcmd($1, 'off', 'zwave', 0);
+    }
+    if ($devid =~ /^(Z[A-P]\d\d?)$/) {
+      $self->xpl_send_rfcmd($1, 'on', 'zwave', 100);
     }
     # Finally test if this is a pure X10 message
     if ($devid =~ /^([A-P]\d\d?)$/) {
